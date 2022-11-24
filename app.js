@@ -46,6 +46,12 @@ class UI {
         document.querySelector("#author").value = "";
         document.querySelector("#isbn").value = "";
     };
+
+    static deleteBook(element){
+        if(element.classList.contains("delete")){
+            element.parentElement.parentElement.remove();
+        }
+    };
 }
 
 // Store Class: Handles Storage
@@ -77,9 +83,4 @@ document.addEventListener("DOMContentLoaded",UI.displayBooks())
 
 // Event Remove a Book
 const bookList = document.querySelector("#book-list")
-bookList.addEventListener("click",(e)=>{
-    console.log(e.target)
-    if(e.target.classList.contains("delete")){
-        bookList.removeChild(e.target.parentElement.parentElement)
-    }
-})
+bookList.addEventListener("click",(e)=>{UI.deleteBook(e.target)});
