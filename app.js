@@ -41,6 +41,23 @@ class UI {
         list.appendChild(row);
     };
 
+    static showAlert(message, className){
+        const div = document.createElement("div");
+        div.setAttribute("role","alert");
+        div.className = `alert alert-${className}`
+        const text = document.createTextNode(message)
+        div.append(text);
+        const container = document.querySelector(".container");
+        const form = document.querySelector("#book-form")
+        container.insertBefore(div,form)
+
+        // Vanish in 2 seconds
+
+        setTimeout(() => {
+            document.querySelector(".alert").remove()
+        }, 2000);
+    }
+
     static clearFields(){
         document.querySelector("#title").value = "";
         document.querySelector("#author").value = "";
@@ -50,6 +67,8 @@ class UI {
     static deleteBook(element){
         if(element.classList.contains("delete")){
             element.parentElement.parentElement.remove();
+            UI.showAlert("Book Deleted.","info")
+
         }
     };
 }
@@ -66,21 +85,41 @@ form.addEventListener("submit", (e) =>{
     const author = document.querySelector("#author").value;
     const isbn = document.querySelector("#isbn").value;
 
-    //Instantiate Book 
-    const book = new Book(title,author,isbn);
-    
-    // Add Book to UI
-    UI.addBookToList(book);
+    // Validate
+    if (title === "" || author === "" || isbn === ""){
+        UI.showAlert("Please fill in all fields.","danger")
+            
+    }else{
 
-    // Clear input fields
-    UI.clearFields();
+        //Instantiate Book 
+        const book = new Book(title,author,isbn);
+    
+        // Add Book to UI
+        UI.addBookToList(book);    
+
+        // Show message
+        UI.showAlert("Book added successfully.","success");
+
+        // Clear input fields
+        UI.clearFields();
+    }
+    
+    
+    
+
+
+
 
 });
-
 
 // Event: Display Books
 document.addEventListener("DOMContentLoaded",UI.displayBooks())
 
 // Event Remove a Book
 const bookList = document.querySelector("#book-list")
-bookList.addEventListener("click",(e)=>{UI.deleteBook(e.target)});
+bookList.addEventListener("click",(e)=>{
+
+    UI.deleteBook(e.target)
+
+    // Show message
+});
